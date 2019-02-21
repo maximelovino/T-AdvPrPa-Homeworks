@@ -6,29 +6,35 @@ def sum(x: Double, y: Double) = x + y
 
 def square(x: Double) = x * x
 
+def third(x: Double) = square(x) * x
+
 def fourth(x: Double) = square(square(x))
 
 square(2)
+third(2)
 fourth(2)
 
 // Question 2
 def EPSILON = 0.0001
 
-def isGoodEnough(x: Double, root: Double) = Math.abs(Math.sqrt(x) - root) < EPSILON
-
+//Square root newton
 def f(approx: Double, x: Double) = square(approx) - x
+def fPrime(approx: Double) = 2 * approx
 
-def fPrime(approx: Double, x: => Double) = 2 * approx
+//Cubic root newton
+def fThird(approx: Double, x: Double) = third(approx) - x
+def fPrimeThird(approx: Double) = 3 * square(approx)
 
-def improve(x: Double, rootApprox: Double) = rootApprox - f(rootApprox, x) / fPrime(rootApprox, x)
+def root(x: Double, precision: Double, f: (Double, Double) => Double, fPrime: Double => Double, mathLibMethod: Double => Double): Double = {
 
-def sqrt(x: Double): Double = {
-  def loop(x: Double, approx: Double): Double = if (isGoodEnough(x, approx)) approx else loop(x, improve(x,approx))
+  def isGoodEnough(x: Double, approx: Double) = Math.abs(mathLibMethod(x) - approx) < precision
 
-  loop(x,10.0)
+  def improve(x: Double, approx: Double) = approx - f(approx,x)/fPrime(approx)
+
+  def loop(x: Double, approx: Double): Double = if (isGoodEnough(x, approx)) approx else loop(x, improve(x, approx))
+
+  loop(x, 10.0)
 }
 
-sqrt(9)
-sqrt(16)
-
-// Optional : Cubic root
+root(27,EPSILON,fThird,fPrimeThird,Math.cbrt)
+root(9,EPSILON,f,fPrime,Math.sqrt)
