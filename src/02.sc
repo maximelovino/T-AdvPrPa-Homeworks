@@ -46,4 +46,42 @@ def sum(f: Double => Double, a: Int, b: Int) = {
 
 sum((x: Double) => x * x, 1, 4)
 
-//Question 3
+//Question 3a
+
+def product(f: Double => Double)(a: Int)(b: Int) = {
+  @tailrec
+  def iter(a: Int, acc: Double): Double = {
+    if (a > b) acc
+    else iter(a + 1, f(a) * acc)
+  }
+
+  iter(a, 1)
+}
+
+product(x => x)(1)(5)
+
+//Question 3b
+
+val factorial = product(x => x)(1) _
+
+factorial(5)
+
+//Question 3c
+
+def loopOperator(op: (Double, Double) => Double)(start: Int)(f: Double => Double)(a: Int)(b: Int) = {
+  @tailrec
+  def iter(a: Int, acc: Double): Double = {
+    if (a > b) acc
+    else iter(a + 1, op(f(a), acc))
+  }
+
+  iter(a, start)
+}
+
+val sumAdv = loopOperator((a, b) => a + b)(0) _
+
+sumAdv(x => x * x)(1)(4)
+
+val prodAdv = loopOperator((a, b) => a * b)(1) _
+
+prodAdv(x => x)(1)(5)
