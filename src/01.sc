@@ -27,13 +27,13 @@ def fPrimeThird(approx: Double) = 3 * square(approx)
 
 def root(x: Double, precision: Double, f: (Double, Double) => Double, fPrime: Double => Double, mathLibMethod: Double => Double): Double = {
 
-  def isGoodEnough(x: Double, approx: Double) = Math.abs(mathLibMethod(x) - approx) < precision
+  def isGoodEnough(approx: Double) = Math.abs(mathLibMethod(x) - approx) < precision
 
-  def improve(x: Double, approx: Double) = approx - f(approx,x)/fPrime(approx)
+  def improve(approx: Double) = approx - f(approx,x)/fPrime(approx)
 
-  def loop(x: Double, approx: Double): Double = if (isGoodEnough(x, approx)) approx else loop(x, improve(x, approx))
+  def loop(approx: Double): Double = if (isGoodEnough(approx)) approx else loop(improve(approx))
 
-  loop(x, 10.0)
+  loop(10.0)
 }
 
 root(27,EPSILON,fThird,fPrimeThird,Math.cbrt)
