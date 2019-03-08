@@ -1,5 +1,5 @@
 abstract class IntSet() {
-  def +(x: Int): IntSet
+  def +(x: IntSet): IntSet
 
   def contains(x: Int): Boolean
 
@@ -9,7 +9,11 @@ abstract class IntSet() {
 
   def intersect(other: IntSet): IntSet
 
-  def -(x: Int): IntSet
+  def -(x: IntSet): IntSet
 
   def isEmpty: Boolean
+}
+
+object IntSet {
+  implicit def int2IntSet(x: Int): IntSet = new NonEmpty(x, Empty, Empty)
 }

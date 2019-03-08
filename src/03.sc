@@ -11,6 +11,6 @@ s.intersect(s2).foreach(println)
 
 (s2 - 5 - 3).foreach(println)
 
-val o1 = Empty.+(3).+(4).+(12).+(5)
-val o2 = o1.-(3).-(4)
+val o1 = Empty + 3 + 4 + 12 + 5
+val o2 = o1 - 3 - 4
 println(o2)

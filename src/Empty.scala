@@ -1,7 +1,7 @@
 object Empty extends IntSet() {
   def contains(x: Int): Boolean = false
 
-  def +(x: Int): IntSet = new NonEmpty(x, Empty, Empty)
+  def +(x: IntSet): IntSet = x
 
   override def toString: String = "-"
 
@@ -11,7 +11,7 @@ object Empty extends IntSet() {
 
   override def intersect(other: IntSet): IntSet = this
 
-  override def -(x: Int): IntSet = this
+  override def -(x: IntSet): IntSet = this
 
   override def isEmpty = true
 }

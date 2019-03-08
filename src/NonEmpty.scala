@@ -1,9 +1,12 @@
+import scala.annotation.tailrec
+
 class NonEmpty(val elem: Int, val left: IntSet, val right: IntSet) extends IntSet {
-  def +(x: Int): IntSet = {
+  def +(x1: IntSet): IntSet = {
+    val x = x1.asInstanceOf[NonEmpty].elem
     if (x < elem) {
-      new NonEmpty(elem, left + x, right)
+      new NonEmpty(elem, left + x1, right)
     } else if (x > elem) {
-      new NonEmpty(elem, left, right + x)
+      new NonEmpty(elem, left, right + x1)
     } else {
       this
     }
@@ -22,12 +25,13 @@ class NonEmpty(val elem: Int, val left: IntSet, val right: IntSet) extends IntSe
   }
 
   override def union(other: IntSet): IntSet = {
+    @tailrec
     def rec(currentTree: IntSet, treeToAdd: IntSet): IntSet = {
       if (treeToAdd.isEmpty)
         currentTree
       else {
         val nonEmptyTree = treeToAdd.asInstanceOf[NonEmpty]
-        rec(currentTree.+(nonEmptyTree.elem), nonEmptyTree.left.union(nonEmptyTree.right))
+        rec(currentTree + nonEmptyTree.elem, nonEmptyTree.left.union(nonEmptyTree.right))
       }
     }
 
@@ -35,6 +39,7 @@ class NonEmpty(val elem: Int, val left: IntSet, val right: IntSet) extends IntSe
   }
 
   override def intersect(other: IntSet): IntSet = {
+    @tailrec
     def rec(currentTree: IntSet, a: IntSet, b: IntSet): IntSet = {
       if (a.isEmpty || b.isEmpty) {
         currentTree
@@ -43,7 +48,7 @@ class NonEmpty(val elem: Int, val left: IntSet, val right: IntSet) extends IntSe
         val nonEmptyB = b.asInstanceOf[NonEmpty]
         rec(
           if (nonEmptyA.contains(nonEmptyB.elem)) {
-            currentTree.+(nonEmptyB.elem)
+            currentTree + nonEmptyB.elem
           } else {
             currentTree
           },
@@ -56,22 +61,17 @@ class NonEmpty(val elem: Int, val left: IntSet, val right: IntSet) extends IntSe
     rec(Empty, this, other)
   }
 
-  override def -(x: Int): IntSet = {
+  override def -(x1: IntSet): IntSet = {
+    val x = x1.asInstanceOf[NonEmpty].elem
     if (x < elem) {
-      new NonEmpty(elem, left - x, right)
+      new NonEmpty(elem, left - x1, right)
     } else if (x > elem) {
-      new NonEmpty(elem, left, right - x)
+      new NonEmpty(elem, left, right - x1)
     } else {
-      //TODO is it really useful or should union take care of this
-      if (left.isEmpty) {
-        right
-      } else if (right.isEmpty) {
-        left
-      } else {
-        left.union(right)
-      }
+      left.union(right)
     }
   }
 
   override def isEmpty = false
 }
+
