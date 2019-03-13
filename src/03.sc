@@ -14,3 +14,13 @@ s.intersect(s2).foreach(println)
 val o1 = Empty + 3 + 4 + 12 + 5
 val o2 = o1 - 3 - 4
 println(o2)
+
+val o3 = o2 + 8 + 7
+val o4 = o3 + 10
+
+println(o3 union o4)
+
+println(o3 intersect o4)
+
+val o5 = o4 - 7 - 8
+println(o3 intersect o5)

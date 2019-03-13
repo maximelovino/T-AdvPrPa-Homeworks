@@ -1,4 +1,4 @@
-import scala.annotation.tailrec
+
 
 class NonEmpty(val elem: Int, val left: IntSet, val right: IntSet) extends IntSet {
   def +(x1: IntSet): IntSet = {
@@ -25,40 +25,15 @@ class NonEmpty(val elem: Int, val left: IntSet, val right: IntSet) extends IntSe
   }
 
   override def union(other: IntSet): IntSet = {
-    @tailrec
-    def rec(currentTree: IntSet, treeToAdd: IntSet): IntSet = {
-      if (treeToAdd.isEmpty)
-        currentTree
-      else {
-        val nonEmptyTree = treeToAdd.asInstanceOf[NonEmpty]
-        rec(currentTree + nonEmptyTree.elem, nonEmptyTree.left.union(nonEmptyTree.right))
-      }
-    }
-
-    rec(this, other)
+    left union right union other + elem
   }
 
   override def intersect(other: IntSet): IntSet = {
-    @tailrec
-    def rec(currentTree: IntSet, a: IntSet, b: IntSet): IntSet = {
-      if (a.isEmpty || b.isEmpty) {
-        currentTree
-      } else {
-        val nonEmptyA = a.asInstanceOf[NonEmpty]
-        val nonEmptyB = b.asInstanceOf[NonEmpty]
-        rec(
-          if (nonEmptyA.contains(nonEmptyB.elem)) {
-            currentTree + nonEmptyB.elem
-          } else {
-            currentTree
-          },
-          nonEmptyA,
-          nonEmptyB.left.union(nonEmptyB.right)
-        )
-      }
+    if (other contains elem) {
+      new NonEmpty(elem, left intersect other, right intersect other)
+    } else {
+      left union right intersect other
     }
-
-    rec(Empty, this, other)
   }
 
   override def -(x1: IntSet): IntSet = {
