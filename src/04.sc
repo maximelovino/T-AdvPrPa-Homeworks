@@ -50,7 +50,7 @@ case class Leaf(value: Int) extends BinaryTree
 case class Node(left: BinaryTree, right: BinaryTree) extends BinaryTree
 
 
-val tree = Node(Node(Leaf(4), Leaf(2)), Node(Leaf(1), Leaf(3)))
+val tree = Node(Node(Node(Leaf(4), Leaf(2)), Node(Leaf(1), Leaf(3))), Node(Node(Leaf(-1), Leaf(6)), Node(Leaf(0), Leaf(3))))
 
 def sumOfTheLeaves(tree: BinaryTree): Int = tree match {
   case Leaf(value) => value
@@ -60,8 +60,15 @@ def sumOfTheLeaves(tree: BinaryTree): Int = tree match {
 sumOfTheLeaves(tree)
 
 
-def smallest(tree: BinaryTree): Int = ??? //TODO
+def smallest(tree: BinaryTree): Int = tree match {
+  case Node(Leaf(a), Leaf(b)) => Math.min(a, b)
+  case Leaf(a) => a
+  case Node(x, Leaf(c)) => Math.min(smallest(x), c)
+  case Node(Leaf(c), x) => Math.min(smallest(x), c)
+  case Node(a, b) => Math.min(smallest(a), smallest(b))
+}
 
+smallest(tree)
 //Question 3
 
 val xs = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
@@ -70,14 +77,14 @@ val ys = xs.map(x => x + 10)
 def last[A](xs: List[A]): A = xs match {
   case Nil => throw new RuntimeException("Can't call last on empty list")
   case head :: Nil => head
-  case head :: tail => last(tail)
+  case _ :: tail => last(tail)
 }
 
 last(xs)
 
 def init[A](xs: List[A]): List[A] = xs match {
   case Nil => Nil
-  case head :: Nil => Nil
+  case _ :: Nil => Nil
   case head :: tail => head :: init(tail)
 }
 
