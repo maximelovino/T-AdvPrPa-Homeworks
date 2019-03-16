@@ -68,7 +68,7 @@ val xs = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 val ys = xs.map(x => x + 10)
 
 def last[A](xs: List[A]): A = xs match {
-  case Nil => throw new Exception("Can't call last on empty list")
+  case Nil => throw new RuntimeException("Can't call last on empty list")
   case head :: Nil => head
   case head :: tail => last(tail)
 }
@@ -83,7 +83,17 @@ def init[A](xs: List[A]): List[A] = xs match {
 
 init(xs)
 
-def reverse[A](xs: List[A]): List[A] = ??? //TODO
+def reverse[A](xs: List[A]): List[A] = {
+  def rec(currentList: List[A], remainingList: List[A]): List[A] = remainingList match {
+    case Nil => Nil
+    case head :: Nil => head :: currentList
+    case head :: tail => rec(head :: currentList, tail)
+  }
+
+  rec(Nil, xs)
+}
+
+reverse(xs)
 
 def concat[A](xs: List[A], ys: List[A]): List[A] = xs match {
   case Nil => ys
@@ -92,16 +102,65 @@ def concat[A](xs: List[A], ys: List[A]): List[A] = xs match {
 
 concat(xs, ys)
 
-def take[A](xs: List[A], n: Int): List[A] = ??? //TODO
-def drop[A](xs: List[A], n: Int): List[A] = ??? //TODO
-def apply[A](xs: List[A], n: Int): A = ??? //TODO
+def take[A](xs: List[A], n: Int): List[A] = n match {
+  case x if x < 0 => throw new RuntimeException("Can't have negative n")
+  case 0 => Nil
+  case _ => xs match {
+    case Nil => Nil
+    case head :: tail => head :: take(tail, n - 1)
+  }
+}
 
+take(xs, 2)
+take(xs, 12)
+take(xs, 0)
+take(xs, 4)
+
+def drop[A](xs: List[A], n: Int): List[A] = n match {
+  case x if x < 0 => throw new RuntimeException("Can't have negative n")
+  case 0 => xs
+  case _ => xs match {
+    case Nil => Nil
+    case _ :: tail => drop(tail, n - 1)
+  }
+}
+
+drop(xs, 2)
+drop(xs, 12)
+drop(xs, 0)
+
+def apply[A](xs: List[A], n: Int): A = n match {
+  case x if x < 0 => throw new RuntimeException("Can't have negative n")
+  case 0 => xs.head
+  case _ => xs match {
+    case Nil => throw new RuntimeException("n bigger than size of list")
+    case _ :: tail => apply(tail, n - 1)
+  }
+}
+
+
+0.until(xs.length).foreach(n => println(apply(xs, n)))
 //Complexity of last: n: size of list, O(n)
 //Complexity of concat: n: size of first list, m: size of second, O(n)
-//Complexity of reverse: //TODO
+//Complexity of reverse: n: size of the list, O(n)
 
 //Question 4
 
-def any[T](p: T => Boolean)(l: List[T]): Boolean = ??? //TODO
+def any[T](p: T => Boolean)(l: List[T]): Boolean = l match {
+  case Nil => false
+  case head :: _ if p(head) => true
+  case _ :: tail => any(p)(tail)
+}
 
-def every[T](p: T => Boolean)(l: List[T]): Boolean = ??? //TODO
+any((x: Int) => x > 10)(xs)
+any((x: Int) => x % 2 == 0)(xs)
+
+def every[T](p: T => Boolean)(l: List[T]): Boolean = l match {
+  case Nil => false
+  case head :: Nil => p(head)
+  case head :: _ if !p(head) => false
+  case _ :: tail => every(p)(tail)
+}
+
+every((x: Int) => x > 10)(ys)
+every((x: Int) => x % 2 == 0)(ys)
