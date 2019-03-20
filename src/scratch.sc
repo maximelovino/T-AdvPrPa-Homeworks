@@ -35,3 +35,28 @@ insert(3, 4 :: Nil)
 insert(3, 2 :: Nil)
 
 isort(List(7, 3, 9, 2))
+
+
+def length[A](x: List[A]): Int = {
+
+  (x foldRight 0) ((_, y) => y + 1)
+
+}
+
+def map[A, B](x: List[A], f: A => B): List[B] = {
+
+  (x foldRight List.empty[B]) ((a, b) => f(a) :: b)
+
+}
+
+val xs = List(1, 2, 3, 4)
+
+length(xs)
+map(xs, (x: Int) => x * 2)
+
+def dup[A](xs: List[A]): List[A] = {
+  xs.foldRight(List.empty[A])((a, b) => a :: a :: b)
+}
+
+dup(xs)
+
