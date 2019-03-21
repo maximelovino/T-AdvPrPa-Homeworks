@@ -25,6 +25,11 @@ def longest(xs: List[String]): (Int, String) = xs.foldLeft((0, ""))((a, b) => if
 
 longest(List("What", "is", "the", "longest?"))
 
+def isPresent(xs: List[Int], element: Int): Boolean = xs.foldLeft(false)((a, b) => a || b == element)
+
+isPresent(List(1, 2, 3, 4), 5)
+isPresent(List(1, 2, 3, 4), 3)
+
 // Not perfect because not tail rec
 def flattenList(xs: List[Any]): List[Any] = {
   xs.foldRight(List.empty[Any])((a, b) => a match {
