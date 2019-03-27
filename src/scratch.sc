@@ -1,3 +1,5 @@
+
+
 def patFoo(x: Any): Boolean = x match {
   case a: Int if a % 4 == 0 => true
   case b: String if b.length == 1 && b.charAt(0).isUpper => true
@@ -60,3 +62,38 @@ def dup[A](xs: List[A]): List[A] = {
 
 dup(xs)
 
+def filter[A](f: A => Boolean, b: List[A]) = {
+  b.foldRight(List.empty[A])((a, b) => if (f(a)) {
+    a :: b
+  } else {
+    b
+  })
+}
+
+val b = (1 to 10).toList
+filter((a: Int) => a % 2 == 0, b)
+
+def partition[A](f: A => Boolean, b: List[A]) = {
+  b.foldRight((List.empty[A], List.empty[A]))((a, b) => if (f(a)) {
+    (a :: b._1, b._2)
+  } else {
+    (b._1, a :: b._2)
+  })
+}
+
+partition((a: Int) => a % 2 == 0, b)
+
+
+case class User(name: String, age: Int)
+
+val userBase = List(User("Travis", 28),
+  User("Kelly", 33),
+  User("Jennifer", 44),
+  User("Dennis", 23))
+
+val youngNames = for (
+  u <- userBase
+  if u.age < 30
+) yield u.name
+
+println(youngNames)
