@@ -140,15 +140,16 @@ def queens(n: Int): List[List[(Int, Int)]] = {
 //TODO redo it using for comprehension
 def printChessBoard(queens: List[List[(Int, Int)]]): String = {
   (for (queenSolution <- queens) yield {
-    (1 to queenSolution.size).foldLeft("")((checkers: String, y: Int) => {
-      checkers + (1 to queenSolution.size).foldLeft("|")((line: String, x: Int) => if (queenSolution.contains((x, y))) line + "\u265b|" else line + "_|") + "\n"
-    })
-  }).zipWithIndex.map {
-    case (solution, index) => s"Solution ${index + 1}:\n$solution"
-  }.mkString("\n\n")
+    queenSolution
+      .sortBy(_._2)
+      .map {
+        case (x, _) => 1.until(x).foldLeft("|")((a, _) => a + "_|") + "\u265b" + (x + 1).to(queenSolution.size).foldLeft("|")((a, _) => a + "_|")
+      }.mkString("\n")
+  }).zipWithIndex
+    .map {
+      case (solution, index) => s"Solution ${index + 1}:\n$solution"
+    }.mkString("\n\n")
 }
 val solutions = queens(4)
 println(printChessBoard(solutions))
-
-//printChessBoard(solutions).foreach(println)
 
