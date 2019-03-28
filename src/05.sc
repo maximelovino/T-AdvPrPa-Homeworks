@@ -67,7 +67,7 @@ println(s"Prime sum with dup size: ${primeSumList.size}")
 def dedupPattern(xs: List[(Int, Int)]): List[(Int, Int)] = {
   def rec(current: List[(Int, Int)], remaining: List[(Int, Int)]): List[(Int, Int)] = remaining match {
     case Nil => current
-    case (a, b) :: tail if current.contains((b, a)) => rec(current, tail)
+    case (a, b) :: tail if a > b => rec(current, tail)
     case head :: tail => rec(head :: current, tail)
   }
 
@@ -79,7 +79,7 @@ println(s"Prime sum with pattern dedup size: ${primeSumListDedupPattern.size}")
 
 //Note that the elements kept will not be the same between dedupFold and dedupPattern to the iteration order difference between the two
 def dedupFold(xs: List[(Int, Int)]): List[(Int, Int)] = {
-  xs.foldRight(List.empty[(Int, Int)])((tuple, list) => if (list.contains((tuple._2, tuple._1))) list else tuple :: list)
+  xs.foldRight(List.empty[(Int, Int)])((tuple, list) => if (tuple._1 > tuple._2) list else tuple :: list)
 }
 
 val primeSumListDedupFold = dedupFold(primeSumList)
