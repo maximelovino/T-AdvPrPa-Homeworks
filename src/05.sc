@@ -137,7 +137,6 @@ def queens(n: Int): List[List[(Int, Int)]] = {
 
 }
 
-//TODO redo it using for comprehension
 def printChessBoard(queens: List[List[(Int, Int)]]): String = {
   (for (queenSolution <- queens) yield {
     queenSolution
