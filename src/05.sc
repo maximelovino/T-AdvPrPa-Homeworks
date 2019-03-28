@@ -141,7 +141,7 @@ def queens(n: Int): List[List[(Int, Int)]] = {
 def printChessBoard(queens: List[List[(Int, Int)]]): String = {
   queens.map(queenSolution => {
     (1 to queenSolution.size).foldLeft("")((checkers: String, y: Int) => {
-      checkers + (1 to queenSolution.size).foldLeft("|")((line: String, x: Int) => if (queenSolution.contains((x, y))) line + "X|" else line + "_|") + "\n"
+      checkers + (1 to queenSolution.size).foldLeft("|")((line: String, x: Int) => if (queenSolution.contains((x, y))) line + "\u265b|" else line + "_|") + "\n"
     })
   }).zipWithIndex.map {
     case (solution, index) => s"Solution ${index + 1}:\n$solution"
