@@ -139,7 +139,7 @@ def queens(n: Int): List[List[(Int, Int)]] = {
 
 //TODO redo it using for comprehension
 def printChessBoard(queens: List[List[(Int, Int)]]): String = {
-  queens.map(queenSolution => {
+  (for (queenSolution <- queens) yield {
     (1 to queenSolution.size).foldLeft("")((checkers: String, y: Int) => {
       checkers + (1 to queenSolution.size).foldLeft("|")((line: String, x: Int) => if (queenSolution.contains((x, y))) line + "\u265b|" else line + "_|") + "\n"
     })
