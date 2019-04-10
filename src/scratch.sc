@@ -1,4 +1,4 @@
-
+import scala.annotation.tailrec
 
 def patFoo(x: Any): Boolean = x match {
   case a: Int if a % 4 == 0 => true
