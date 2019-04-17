@@ -1,4 +1,4 @@
-import scala.annotation.tailrec
+
 
 def patFoo(x: Any): Boolean = x match {
   case a: Int if a % 4 == 0 => true
@@ -97,3 +97,8 @@ val youngNames = for (
 ) yield u.name
 
 println(youngNames)
+
+
+def map[T](l: List[T], f: T => T): List[T] = l.foldLeft(List.empty[T])((xs, el) => xs :+ f(el))
+def flatMap[T](l: List[T], f: T => List[T]): List[T] = l.foldLeft(List.empty[T])((xs, el) => xs ++ f(el))
+def filter[T](l: List[T], f: T => Boolean): List[T] = l.foldLeft(List.empty[T])((xs, el) => if (f(el)) xs :+ el else xs)
