@@ -13,7 +13,7 @@ object BitcoinAPI extends App {
   implicit val formats: DefaultFormats.type = DefaultFormats
 
   def contentFromURL(url: String): Future[String] = Future {
-    val source = Source.fromURL(new URL(url))
+    val source = Source.fromURL(url)
     source.mkString
   }
 
